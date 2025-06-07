@@ -1,23 +1,44 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ModuStack Visit</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-12">
-                <h1 class="text-center">Bienvenido a ModuStack Visit</h1>
-                <?php
-                    echo "<p class='text-center'>La fecha actual es: " . date('d/m/Y H:i:s') . "</p>";
-                ?>
-            </div>
-        </div>
-    </div>
+<?php
+require_once 'config/config.php';
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html> 
+// Autoload básico
+spl_autoload_register(function ($class) {
+    $paths = [
+        CONTROLLERS_PATH,
+        MODELS_PATH
+    ];
+    
+    foreach ($paths as $path) {
+        $file = $path . $class . '.php';
+        if (file_exists($file)) {
+            require_once $file;
+            return;
+        }
+    }
+});
+
+// Router básico
+$url = $_GET['url'] ?? '';
+$url = rtrim($url, '/');
+$url = filter_var($url, FILTER_SANITIZE_URL);
+$url = explode('/', $url);
+
+// Controlador por defecto
+$controllerName = !empty($url[0]) ? ucfirst($url[0]) . 'Controller' : 'HomeController';
+$actionName = !empty($url[1]) ? $url[1] : 'index';
+
+// Cargar el controlador
+if (file_exists(CONTROLLERS_PATH . $controllerName . '.php')) {
+    $controller = new $controllerName();
+    if (method_exists($controller, $actionName)) {
+        $controller->$actionName();
+    } else {
+        // Error 404 - Acción no encontrada
+        header("HTTP/1.0 404 Not Found");
+        echo "Acción no encontrada";
+    }
+} else {
+    // Error 404 - Controlador no encontrado
+    header("HTTP/1.0 404 Not Found");
+    echo "Controlador no encontrado";
+} 
