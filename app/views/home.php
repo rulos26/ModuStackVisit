@@ -8,6 +8,7 @@
                 <div class="alert alert-info mt-3">
                     <strong>Rol:</strong> <?php echo htmlspecialchars($user['role']); ?>
                 </div>
+                <a href="<?php echo APP_URL; ?>/dbtest" class="btn btn-primary mt-3">Probar conexión a la base de datos</a>
             </div>
         </div>
 
