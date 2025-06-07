@@ -9,13 +9,9 @@ if (file_exists(dirname(__DIR__) . '/.env')) {
     }
 }
 
-// Definir rutas base
-define('BASE_PATH', dirname(__DIR__));
-define('APP_PATH', BASE_PATH . '/app');
-define('CONTROLLERS_PATH', APP_PATH . '/controllers/');
-define('MODELS_PATH', APP_PATH . '/models/');
-define('VIEWS_PATH', APP_PATH . '/views/');
-define('PUBLIC_PATH', BASE_PATH . '/public/');
+// Definir APP_PATH para poder incluir la configuración
+define('APP_PATH', dirname(__DIR__) . '/app');
+require_once APP_PATH . '/config/config.php';
 
 // Configuración de logs
 require_once APP_PATH . '/core/Logger.php';
