@@ -14,4 +14,4 @@ define('DB_NAME', 'modustack_visit');
 
 // Configuración de la aplicación
 define('APP_NAME', 'ModuStack Visit');
-define('APP_URL', 'http://localhost/ModuStackVisit'); 
+define('APP_URL', 'https://rulossoluciones.com/ModuStackVisit'); 
