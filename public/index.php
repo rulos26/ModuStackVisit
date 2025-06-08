@@ -78,9 +78,9 @@ $url = rtrim($url, '/');
 $url = filter_var($url, FILTER_SANITIZE_URL);
 $url = explode('/', $url);
 
-// Redirección a login si no está autenticado y no está accediendo a login o logout
-$publicRoutes = ['login', 'logout'];
-if (!isset($_SESSION['user_id']) && (!isset($url[0]) || ($url[0] !== 'login' && $url[0] !== 'logout'))) {
+// Rutas públicas que no requieren sesión
+$publicRoutes = ['login', 'register', 'forgotpassword', 'resetpassword', 'logout'];
+if (!isset($_SESSION['user_id']) && (!isset($url[0]) || !in_array(strtolower($url[0]), $publicRoutes))) {
     header('Location: ' . APP_URL . '/login');
     exit;
 }

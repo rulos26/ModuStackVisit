@@ -6,7 +6,12 @@ class BaseController {
         
         // Incluir el layout principal
         $content = VIEWS_PATH . $view . '.php';
-        require_once VIEWS_PATH . 'layouts/main.php';
+        $noLayoutViews = ['login', 'register', 'forgot-password', 'reset-password'];
+        if (in_array($view, $noLayoutViews)) {
+            require $content;
+        } else {
+            require_once VIEWS_PATH . 'layouts/main.php';
+        }
     }
 
     protected function redirect($url) {

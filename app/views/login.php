@@ -54,7 +54,8 @@
             <button type="submit" class="btn btn-primary w-100">Entrar</button>
         </form>
         <div class="mt-3 text-center">
-            <a href="<?php echo APP_URL; ?>/register">¿No tienes cuenta? Regístrate aquí</a>
+            <a href="<?php echo APP_URL; ?>/register">¿No tienes cuenta? Regístrate aquí</a><br>
+            <a href="<?php echo APP_URL; ?>/forgotpassword">¿Olvidaste tu contraseña?</a>
         </div>
         <footer class="mt-4 text-center text-muted">
             &copy; <?php echo date('Y'); ?> ModuStack Visit
