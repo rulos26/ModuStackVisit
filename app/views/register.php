@@ -28,7 +28,7 @@
         <?php if (!empty($success)): ?>
             <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
         <?php endif; ?>
-        <form method="post" action="<?php echo APP_URL; ?>/register">
+        <form method="post" action="<?php echo APP_URL; ?>/register/register">
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre completo</label>
                 <input type="text" class="form-control" id="nombre" name="nombre" required value="<?php echo htmlspecialchars($old['nombre'] ?? ''); ?>">
@@ -154,5 +154,4 @@
         togglePasswordVisibility('togglePassword2', 'password2');
     </script>
 </body>
-</html> 
 </html> 
