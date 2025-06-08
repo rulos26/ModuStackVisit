@@ -85,8 +85,13 @@ if (!isset($_SESSION['user_id']) && (!isset($url[0]) || !in_array(strtolower($ur
     exit;
 }
 
+// Convierte 'forgotpassword' en 'ForgotPasswordController', 'resetpassword' en 'ResetPasswordController', etc.
+function toStudlyCaps($string) {
+    return str_replace(' ', '', ucwords(preg_replace('/([a-z])([A-Z])/', '$1 $2', $string)));
+}
+
 // Controlador por defecto
-$controllerName = !empty($url[0]) ? ucfirst($url[0]) . 'Controller' : 'LoginController';
+$controllerName = !empty($url[0]) ? toStudlyCaps($url[0]) . 'Controller' : 'LoginController';
 $actionName = !empty($url[1]) ? $url[1] : 'index';
 
 // Cargar el controlador
