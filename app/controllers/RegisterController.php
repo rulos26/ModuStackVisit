@@ -44,6 +44,16 @@ class RegisterController extends BaseController
         $db = Database::getConnection();
         $db->beginTransaction();
         try {
+            // Validar estructura de la tabla (opcional, solo en desarrollo)
+            if (getenv('APP_ENV') === 'development') {
+                $cols = $db->query("SHOW COLUMNS FROM usuarios")->fetchAll(PDO::FETCH_COLUMN);
+                $required = ['nombre', 'email', 'password', 'creado_en'];
+                foreach ($required as $col) {
+                    if (!in_array($col, $cols)) {
+                        throw new Exception("Falta la columna '$col' en la tabla usuarios");
+                    }
+                }
+            }
             $stmt = $db->prepare("INSERT INTO usuarios (nombre, email, password, creado_en) VALUES (?, ?, ?, NOW())");
             $stmt->execute([$nombre, $email, $hash]);
             $userId = $db->lastInsertId();
@@ -57,7 +67,8 @@ class RegisterController extends BaseController
         } catch (Exception $e) {
             $db->rollBack();
             $this->logAuthError($email, 'Registro fallido', $e->getMessage());
-            $this->render('register', ['error' => 'Error al registrar usuario.', 'success' => '', 'old' => $old]);
+            $errorMsg = (getenv('APP_ENV') === 'development') ? $e->getMessage() : 'Error al registrar usuario.';
+            $this->render('register', ['error' => $errorMsg, 'success' => '', 'old' => $old]);
         }
     }
 
