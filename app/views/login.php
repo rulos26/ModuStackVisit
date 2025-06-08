@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión | ModuStack Visit</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
         body {
             min-height: 100vh;
@@ -48,7 +49,12 @@
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Contraseña</label>
-                <input type="password" class="form-control" id="password" name="password" required minlength="8" autocomplete="current-password" title="Debe tener al menos 8 caracteres, mayúsculas, minúsculas, un número y un carácter especial.">
+                <div class="input-group">
+                    <input type="password" class="form-control" id="password" name="password" required minlength="8" autocomplete="current-password" title="Debe tener al menos 8 caracteres, mayúsculas, minúsculas, un número y un carácter especial.">
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
                 <div class="form-text" id="passwordHelp"></div>
             </div>
             <button type="submit" class="btn btn-primary w-100">Entrar</button>
@@ -72,6 +78,21 @@
             } else {
                 help.textContent = 'Contraseña segura.';
                 help.className = 'form-text text-success';
+            }
+        });
+
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
             }
         });
     </script>
