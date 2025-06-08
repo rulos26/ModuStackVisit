@@ -1,10 +1,10 @@
 <?php
 return [
-    'host' => 'mailpit',
-    'username' => null,
-    'password' => null,
-    'port' => 1025,
-    'from_email' => 'hello@example.com',
+    'host' => 'smtp.gmail.com',
+    'username' => 'rulos26@gmail.com',
+    'password' => 'imltkpfnvehflplt',
+    'port' => 587,
+    'from_email' => 'rulos26@gmail.com',
     'from_name' => APP_NAME,
-    'secure' => null // sin cifrado
+    'secure' => 'tls' // cifrado TLS para Gmail
 ]; 
