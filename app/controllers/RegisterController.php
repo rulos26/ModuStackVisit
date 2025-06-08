@@ -8,20 +8,68 @@ class RegisterController extends BaseController
 
     public function register()
     {
-        // Prueba de depuración: mostrar datos recibidos y verificar conexión
-        echo '<pre>POST:';
-        var_dump($_POST);
-        echo '</pre>';
-        
-        try {
-            $db = Database::getConnection();
-            echo '<pre>DB Conexión:';
-            var_dump($db);
-            echo '</pre>';
-        } catch (Exception $e) {
-            echo '<pre>Error de conexión: ' . $e->getMessage() . '</pre>';
+        $error = '';
+        $success = '';
+        $old = [
+            'nombre' => $_POST['nombre'] ?? '',
+            'email' => $_POST['email'] ?? ''
+        ];
+        $nombre = trim($_POST['nombre'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $password = $_POST['password'] ?? '';
+        $password2 = $_POST['password2'] ?? '';
+        $ip = $_SERVER['REMOTE_ADDR'] ?? 'CLI';
+
+        // Validaciones
+        if (empty($nombre) || empty($email) || empty($password) || empty($password2)) {
+            $error = 'Todos los campos son obligatorios.';
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error = 'Correo electrónico inválido.';
+        } elseif ($password !== $password2) {
+            $error = 'Las contraseñas no coinciden.';
+        } elseif (!$this->isPasswordSecure($password)) {
+            $error = 'La contraseña no cumple los requisitos de seguridad.';
+        } elseif (User::findByEmail($email)) {
+            $error = 'El correo ya está registrado.';
         }
-        exit;
+
+        if ($error) {
+            $this->logAuthError($email, 'Registro fallido', $error);
+            $this->render('register', ['error' => $error, 'success' => '', 'old' => $old]);
+            return;
+        }
+
+        // Crear usuario
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+        $db = Database::getConnection();
+        $db->beginTransaction();
+        try {
+            // Validar estructura de la tabla (opcional, solo en desarrollo)
+            if (getenv('APP_ENV') === 'development') {
+                $cols = $db->query("SHOW COLUMNS FROM usuarios")->fetchAll(PDO::FETCH_COLUMN);
+                $required = ['nombre', 'email', 'password', 'creado_en'];
+                foreach ($required as $col) {
+                    if (!in_array($col, $cols)) {
+                        throw new Exception("Falta la columna '$col' en la tabla usuarios");
+                    }
+                }
+            }
+            $stmt = $db->prepare("INSERT INTO usuarios (nombre, email, password, creado_en) VALUES (?, ?, ?, NOW())");
+            $stmt->execute([$nombre, $email, $hash]);
+            $userId = $db->lastInsertId();
+            // Asignar rol evaluador
+            $stmt2 = $db->prepare("INSERT INTO usuario_rol (usuario_id, rol_id) VALUES (?, (SELECT id FROM roles WHERE nombre = 'evaluador' LIMIT 1))");
+            $stmt2->execute([$userId]);
+            $db->commit();
+            $this->logAuthError($email, 'Registro exitoso', 'Usuario registrado correctamente. IP: ' . $ip);
+            $success = 'Registro exitoso. Ahora puedes iniciar sesión.';
+            $this->render('register', ['error' => '', 'success' => $success, 'old' => []]);
+        } catch (Exception $e) {
+            $db->rollBack();
+            $this->logAuthError($email, 'Registro fallido', $e->getMessage());
+            $errorMsg = (getenv('APP_ENV') === 'development') ? $e->getMessage() : 'Error al registrar usuario.';
+            $this->render('register', ['error' => $errorMsg, 'success' => '', 'old' => $old]);
+        }
     }
 
     private function isPasswordSecure($password): bool
