@@ -44,7 +44,7 @@ class HomeController extends BaseController {
             $mail->SMTPSecure = $mailConfig['secure'];
             $mail->Port = $mailConfig['port'];
             $mail->setFrom($mailConfig['from_email'], $mailConfig['from_name']);
-            $mail->addAddress('destinatario@correo.com', 'Destinatario de Prueba'); // Cambia por tu correo de prueba
+            $mail->addAddress('rulos26@gmail.com', 'Destinatario de Prueba'); // Ahora llega a tu correo real
             $mail->isHTML(true);
             $mail->Subject = 'Correo de prueba desde ModuStack Visit';
             $mail->Body = '<h2>¡Correo de prueba enviado correctamente!</h2><p>Este es un correo de prueba usando PHPMailer.</p>';
