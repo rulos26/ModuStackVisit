@@ -9,6 +9,8 @@ if (file_exists(dirname(__DIR__) . '/.env')) {
     }
 }
 
+session_start();
+
 // Definir APP_PATH para poder incluir la configuración
 define('APP_PATH', dirname(__DIR__) . '/app');
 require_once APP_PATH . '/config/config.php';
@@ -76,8 +78,15 @@ $url = rtrim($url, '/');
 $url = filter_var($url, FILTER_SANITIZE_URL);
 $url = explode('/', $url);
 
+// Redirección a login si no está autenticado y no está accediendo a login o logout
+$publicRoutes = ['login', 'logout'];
+if (!isset($_SESSION['user_id']) && (!isset($url[0]) || ($url[0] !== 'login' && $url[0] !== 'logout'))) {
+    header('Location: ' . APP_URL . '/login');
+    exit;
+}
+
 // Controlador por defecto
-$controllerName = !empty($url[0]) ? ucfirst($url[0]) . 'Controller' : 'HomeController';
+$controllerName = !empty($url[0]) ? ucfirst($url[0]) . 'Controller' : 'LoginController';
 $actionName = !empty($url[1]) ? $url[1] : 'index';
 
 // Cargar el controlador

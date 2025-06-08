@@ -40,4 +40,10 @@ class User {
             ]
         ];
     }
+
+    public static function findByEmail($email)
+    {
+        $stmt = Database::query("SELECT * FROM usuarios WHERE email = ?", [$email]);
+        return $stmt ? $stmt->fetch() : null;
+    }
 } 

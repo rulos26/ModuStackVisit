@@ -9,6 +9,10 @@
                     <strong>Rol:</strong> <?php echo htmlspecialchars($user['role']); ?>
                 </div>
                 <a href="<?php echo APP_URL; ?>/dbtest" class="btn btn-primary mt-3">Probar conexión a la base de datos</a>
+                <a href="<?php echo APP_URL; ?>/home/sendTestMail" class="btn btn-success mt-3 ms-2">Enviar correo de prueba</a>
+                <?php if (!empty($mail_result)): ?>
+                    <div class="alert alert-info mt-3"><?php echo htmlspecialchars($mail_result); ?></div>
+                <?php endif; ?>
             </div>
         </div>
 
