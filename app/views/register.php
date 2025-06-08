@@ -55,6 +55,7 @@
                         <i class="bi bi-eye"></i>
                     </button>
                 </div>
+                <div class="form-text" id="password2Help"></div>
             </div>
             <button type="submit" class="btn btn-primary w-100">Registrarse</button>
             <div class="mt-3 text-center">
@@ -78,7 +79,31 @@
                 help.textContent = 'Contraseña segura.';
                 help.className = 'form-text text-success';
             }
+            validatePasswordsMatch();
         });
+
+        // Validación de coincidencia de contraseñas
+        document.getElementById('password2').addEventListener('input', validatePasswordsMatch);
+
+        function validatePasswordsMatch() {
+            const password = document.getElementById('password').value;
+            const password2 = document.getElementById('password2').value;
+            const help = document.getElementById('password2Help');
+            
+            if (password2 === '') {
+                help.textContent = '';
+                help.className = 'form-text';
+                return;
+            }
+
+            if (password === password2) {
+                help.textContent = 'Las contraseñas coinciden.';
+                help.className = 'form-text text-success';
+            } else {
+                help.textContent = 'Las contraseñas no coinciden.';
+                help.className = 'form-text text-danger';
+            }
+        }
 
         // Función para mostrar/ocultar contraseña
         function togglePasswordVisibility(buttonId, inputId) {
