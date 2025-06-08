@@ -42,7 +42,7 @@
         <?php if (!empty($error)): ?>
             <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
-        <form method="post" action="<?php echo APP_URL; ?>/login">
+        <form method="post" action="<?php echo APP_URL; ?>/login/login">
             <div class="mb-3">
                 <label for="email" class="form-label">Correo electrónico</label>
                 <input type="email" class="form-control" id="email" name="email" required autocomplete="username" value="<?php echo htmlspecialchars($email ?? ''); ?>">
