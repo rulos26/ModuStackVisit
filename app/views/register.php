@@ -57,7 +57,7 @@
                 </div>
                 <div class="form-text" id="password2Help"></div>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+            <button type="submit" class="btn btn-primary w-100" id="btnRegister">Registrarse</button>
             <div class="mt-3 text-center">
                 <a href="<?php echo APP_URL; ?>/login">¿Ya tienes cuenta? Inicia sesión</a>
             </div>
@@ -68,6 +68,9 @@
     </div>
     <script>
         // Validación de contraseña en cliente
+        let passwordValid = false;
+        let passwordsMatch = false;
+
         document.getElementById('password').addEventListener('input', function() {
             const val = this.value;
             const help = document.getElementById('passwordHelp');
@@ -75,15 +78,20 @@
             if (!regex.test(val)) {
                 help.textContent = 'Contraseña insegura: mínimo 8 caracteres, mayúsculas, minúsculas, número y carácter especial.';
                 help.className = 'form-text text-danger';
+                passwordValid = false;
             } else {
                 help.textContent = 'Contraseña segura.';
                 help.className = 'form-text text-success';
+                passwordValid = true;
             }
             validatePasswordsMatch();
+            updateRegisterButton();
         });
 
-        // Validación de coincidencia de contraseñas
-        document.getElementById('password2').addEventListener('input', validatePasswordsMatch);
+        document.getElementById('password2').addEventListener('input', function() {
+            validatePasswordsMatch();
+            updateRegisterButton();
+        });
 
         function validatePasswordsMatch() {
             const password = document.getElementById('password').value;
@@ -93,17 +101,35 @@
             if (password2 === '') {
                 help.textContent = '';
                 help.className = 'form-text';
+                passwordsMatch = false;
                 return;
             }
 
             if (password === password2) {
                 help.textContent = 'Las contraseñas coinciden.';
                 help.className = 'form-text text-success';
+                passwordsMatch = true;
             } else {
                 help.textContent = 'Las contraseñas no coinciden.';
                 help.className = 'form-text text-danger';
+                passwordsMatch = false;
             }
         }
+
+        function updateRegisterButton() {
+            const btn = document.getElementById('btnRegister');
+            btn.disabled = !(passwordValid && passwordsMatch);
+        }
+
+        // Inicializar el estado del botón al cargar
+        updateRegisterButton();
+
+        // Evitar envío si hay errores en cliente
+        document.querySelector('form').addEventListener('submit', function(e) {
+            if (!(passwordValid && passwordsMatch)) {
+                e.preventDefault();
+            }
+        });
 
         // Función para mostrar/ocultar contraseña
         function togglePasswordVisibility(buttonId, inputId) {
@@ -128,4 +154,5 @@
         togglePasswordVisibility('togglePassword2', 'password2');
     </script>
 </body>
+</html> 
 </html> 
