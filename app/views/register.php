@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro | ModuStack Visit</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
         body { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bs-body-bg); }
         .register-card { max-width: 400px; width: 100%; border-radius: 1rem; box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15); }
@@ -38,14 +39,22 @@
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Contraseña</label>
-                <input type="password" class="form-control" id="password" name="password" required minlength="8"
-                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\"\\|,.<>\\/?]).{8,}$"
-                    title="Debe tener al menos 8 caracteres, mayúsculas, minúsculas, un número y un carácter especial.">
+                <div class="input-group">
+                    <input type="password" class="form-control" id="password" name="password" required minlength="8" title="Debe tener al menos 8 caracteres, mayúsculas, minúsculas, un número y un carácter especial.">
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
                 <div class="form-text" id="passwordHelp"></div>
             </div>
             <div class="mb-3">
                 <label for="password2" class="form-label">Confirmar contraseña</label>
-                <input type="password" class="form-control" id="password2" name="password2" required minlength="8">
+                <div class="input-group">
+                    <input type="password" class="form-control" id="password2" name="password2" required minlength="8">
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword2">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
             </div>
             <button type="submit" class="btn btn-primary w-100">Registrarse</button>
             <div class="mt-3 text-center">
@@ -70,6 +79,28 @@
                 help.className = 'form-text text-success';
             }
         });
+
+        // Función para mostrar/ocultar contraseña
+        function togglePasswordVisibility(buttonId, inputId) {
+            document.getElementById(buttonId).addEventListener('click', function() {
+                const passwordInput = document.getElementById(inputId);
+                const icon = this.querySelector('i');
+                
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('bi-eye');
+                    icon.classList.add('bi-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('bi-eye-slash');
+                    icon.classList.add('bi-eye');
+                }
+            });
+        }
+
+        // Inicializar los botones de mostrar/ocultar contraseña
+        togglePasswordVisibility('togglePassword', 'password');
+        togglePasswordVisibility('togglePassword2', 'password2');
     </script>
 </body>
 </html> 
