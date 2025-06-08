@@ -48,7 +48,7 @@
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Contraseña</label>
-                <input type="password" class="form-control" id="password" name="password" required minlength="8" autocomplete="current-password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':\"\\|,.<>\/?]).{8,}$" title="Debe tener al menos 8 caracteres, mayúsculas, minúsculas, un número y un carácter especial.">
+                <input type="password" class="form-control" id="password" name="password" required minlength="8" autocomplete="current-password" title="Debe tener al menos 8 caracteres, mayúsculas, minúsculas, un número y un carácter especial.">
                 <div class="form-text" id="passwordHelp"></div>
             </div>
             <button type="submit" class="btn btn-primary w-100">Entrar</button>
